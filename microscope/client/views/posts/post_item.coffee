@@ -1,5 +1,5 @@
 Template.postItem.helpers
   domain: ->
     a = document.createElement 'a'
-    a.href = this.url
+    a.href = @.url
     a.hostname

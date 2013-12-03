@@ -8,4 +8,5 @@ Template.postSubmit.events 'submit form': (e) ->
 
   Meteor.call 'post', post, (error, id) ->
     return alert(error.reason) if error
-    Meteor.Router.to 'postsList'
+
+  Meteor.Router.to 'postsList'

@@ -1,4 +1,5 @@
 @Posts = new Meteor.Collection 'posts'
+
 Meteor.methods post: (postAttributes) ->
   user = Meteor.user()
   postWithSameLink = Posts.findOne url: postAttributes.url
@@ -7,11 +8,11 @@ Meteor.methods post: (postAttributes) ->
   throw new Meteor.Error(422, "Please fill in a headline") unless postAttributes.title
   throw new Meteor.Error(302, "This link has already been posted", postWithSameLink._id) if postAttributes.url and postWithSameLink
 
-  post = _.extend(_.pick postAttributes, "url", "message"
-    title: postAttributes.title + @.isSimulation ? '(client)' : '(server)'
+  post = _.extend _.pick(postAttributes, "url", "title", "message"),
+    title: postAttributes.title + (if @.isSimulation then '(client)' else '(server)')
     userId: user._id
     author: user.username
-    submitted: new Date().getTime())
+    submitted: new Date().getTime()
 
   if (! @.isSimulation)
     Future = Npm.require('fibers/future')
@@ -21,5 +22,5 @@ Meteor.methods post: (postAttributes) ->
       5 * 1000
       future.wait()
 
-  postId = Posts.insert(post)
+  postId = Posts.insert post
   postId

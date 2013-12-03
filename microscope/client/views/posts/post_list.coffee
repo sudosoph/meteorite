@@ -1,3 +1,3 @@
 Template.postsList.helpers
   posts: ->
-    Posts.find({}, {sort: {submitted: -1}})
+    Posts.find {}, {sort: {submitted: -1}}
